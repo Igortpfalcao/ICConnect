@@ -1,16 +1,19 @@
+import type { JSX, MouseEventHandler } from "react";
 import "./Styles.css";
 
-export default function AppCard() {
+export default function AppCard(props: {
+  title: string;
+  label: string;
+  content: string;
+  onClick?: MouseEventHandler<HTMLDivElement>;
+}): JSX.Element {
   return (
-    <div className="app-card">
+    <div className="app-card" onClick={props.onClick}>
       <div className="card-row">
-        <h2 >SIMTECH</h2>
-        <p id="label-left">07/12 - 11/12</p>
+        <h2>{props.title}</h2>
+        <p id="label-left">{props.label}</p>
       </div>
-      <p className="content">
-        O evento que ocorrerá no IME, conta com palestras, stands e diversas
-        atividade para os estudantes do IC e de fora também,
-      </p>
+      <p className="content">{props.content}</p>
     </div>
   );
 }
