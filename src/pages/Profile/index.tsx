@@ -2,9 +2,13 @@ import { useState } from "react";
 import AppInput from "../../components/AppInput";
 import Header from "../../components/Header/Header";
 import "./Styles.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const [activeSection, setActiveSection] = useState("edit-profile");
+  const [showDialog, setShowDialog] = useState(false);
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -22,21 +26,30 @@ export default function Profile() {
 
           <button
             value="change-password"
-            className={activeSection === "change-password" ? "active" : "inactive"}
+            className={
+              activeSection === "change-password" ? "active" : "inactive"
+            }
             onClick={() => setActiveSection("change-password")}
           >
             Alterar senha
           </button>
 
-          <button value="exit" className="exit-button">
+          <button
+            value="exit"
+            className="exit-button"
+            onClick={() => navigate("/login")}
+          >
             Sair
           </button>
         </aside>
 
-        {/* EDITAR PERFIL */}
         <section
           id="user-info"
-          className={activeSection === "edit-profile" ? "section-active" : "section-inactive"}
+          className={
+            activeSection === "edit-profile"
+              ? "section-active"
+              : "section-inactive"
+          }
         >
           <AppInput
             type="text"
@@ -59,20 +72,21 @@ export default function Profile() {
 
           <div className="profile-btns">
             <button id="save-btn">Salvar</button>
-            <button id="delete-btn">Deletar conta</button>
+            <button id="delete-btn" onClick={() => setShowDialog(true)}>
+              Deletar conta
+            </button>
           </div>
         </section>
 
-        {/* TROCAR SENHA */}
         <section
           id="change-password"
-          className={activeSection === "change-password" ? "section-active" : "section-inactive"}
+          className={
+            activeSection === "change-password"
+              ? "section-active"
+              : "section-inactive"
+          }
         >
-          <AppInput
-            type="password"
-            name="password-input"
-            label="Nova Senha"
-          />
+          <AppInput type="password" name="password-input" label="Nova Senha" />
           <AppInput
             type="password"
             name="confirm-password-input"
@@ -83,6 +97,34 @@ export default function Profile() {
             <button id="save-btn">Salvar</button>
           </div>
         </section>
+
+        {showDialog && (
+          <div className="dialog-overlay">
+            <div className="dialog-box">
+              <h3>Tem certeza?</h3>
+              <p>
+                Você realmente deseja deletar sua conta? Essa ação é
+                irreversível.
+              </p>
+
+              <div className="dialog-actions">
+                <button className="cancel" onClick={() => setShowDialog(false)}>
+                  Cancelar
+                </button>
+
+                <button
+                  className="confirm"
+                  onClick={() => {
+                    setShowDialog(false);
+                    alert("Conta deletada!");
+                  }}
+                >
+                  Deletar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </main>
     </>
   );
